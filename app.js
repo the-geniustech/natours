@@ -8,6 +8,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const hpp = require('hpp');
 const xss = require('xss-clean');
 const cookieParser = require('cookie-parser');
+const compression = require('compression');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -41,11 +42,7 @@ app.use(
         'https://cdnjs.cloudflare.com/',
       ],
       'img-src': ["'self'", 'data:', 'https://*.tile.openstreetmap.org'],
-      'connect-src': [
-        "'self'",
-        'ws://127.0.0.1:49476/',
-        'http://127.0.0.1:8000',
-      ],
+      'connect-src': ["'self'", '/', '/'],
     },
   }),
 );
@@ -87,6 +84,8 @@ app.use(
     ],
   }),
 );
+
+app.use(compression());
 
 // Test middleware
 app.use((req, res, next) => {
